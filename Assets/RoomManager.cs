@@ -6,9 +6,9 @@ public class RoomManager : MonoBehaviour
 {
 	private GameObject[] rooms;
 	private GameObject map;
-	
-	// Use this for initialization
-	void Start () {
+
+	void Awake()
+	{
 		this.map = GameObject.FindWithTag("Map");
 		rooms = new GameObject[map.transform.childCount];
 
@@ -17,6 +17,11 @@ public class RoomManager : MonoBehaviour
 			this.rooms[i] = map.transform.GetChild(i).gameObject;
 			this.rooms[i].GetComponent<RoomStats>().Init();
 		}
+	}
+	
+	// Use this for initialization
+	void Start () {
+
 	}
 	
 	// Update is called once per frame

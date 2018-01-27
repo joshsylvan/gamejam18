@@ -67,5 +67,10 @@ public class RoomStats : MonoBehaviour
 	{
 		this.isPlayerHere = isPlayerHere;
 	}
+
+	public bool IsPlayerHere()
+	{
+		return this.isPlayerHere;
+	}
 	
 }
