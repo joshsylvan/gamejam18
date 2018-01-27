@@ -23,7 +23,7 @@ public class ServerHandler : MonoBehaviour {
 	public void GetServerInformation()
 	{
 		WWW www = new WWW(url);
-		StartCoroutine(WaitForRequest(www));
+		StartCoroutine(UploadData(10, 1, 1));
 	}
 	
 	IEnumerator WaitForRequest(WWW www)
@@ -48,9 +48,8 @@ public class ServerHandler : MonoBehaviour {
 	
 	IEnumerator UploadData(int health, float x, float y) {
 		WWWForm form = new WWWForm();
-		form.AddField("myField", "myData");
 
-		using (UnityWebRequest www = UnityWebRequest.Post("http://www.my-server.com/myform?health=" + health, form))
+		using (UnityWebRequest www = UnityWebRequest.Post("https://gamejamserver.herokuapp.com/command?name=josh", form))
 		{
 			yield return www.Send();
 
