@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour {
 	//private Animator animator;
 	private Rigidbody2D rigidBody;
 
-	private bool moving;						//true if moving - used to change sprite to moving animation
+	private bool moving;//true if moving - used to change sprite to moving animation
 
 	public Sprite[] idleFacingFrontSprites = new Sprite[8];
 	public Sprite[] idleFacingBackSprites = new Sprite[8];
