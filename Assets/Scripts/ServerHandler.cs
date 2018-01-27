@@ -11,7 +11,7 @@ public class ServerHandler : MonoBehaviour {
 	
 	// Use this for initialization
 	public string url = "https://api.github.com/users/joshsylvan";
-	private string urlUpload = "https://api.github.com/users/joshsylvan";
+	private string urlUpload = "https://gamejamserver.herokuapp.com/command";
 	private WWW response;
 	private ServerResponce sr;
 	
