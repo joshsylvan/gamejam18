@@ -699,6 +699,11 @@ Prefab:
       propertyPath: ammoUI
       value: 
       objectReference: {fileID: 763979940}
+    - target: {fileID: 114207535082954968, guid: 1b0ae5a9a646c49ceae1a6318ca69324,
+        type: 2}
+      propertyPath: bulletsHolder
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1b0ae5a9a646c49ceae1a6318ca69324, type: 2}
   m_IsPrefabParent: 0
