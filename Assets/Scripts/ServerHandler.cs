@@ -39,7 +39,6 @@ public class ServerHandler : MonoBehaviour {
 //			ServerResponce json = JsonUtility.FromJson<ServerResponce>(jsonString);
 			sr = JsonUtility.FromJson<ServerResponce>(response.text);
 			Debug.Log("WWW Ok!: " + sr.login);
-			
 		} 
 		else
 		{
