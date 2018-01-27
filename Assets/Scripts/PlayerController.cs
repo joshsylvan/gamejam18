@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickX));
+//		Debug.Log (XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickX));
 //		Debug.Log (XboxCtrlrInput.XboxAxis.LeftTrigger);
 
 //		XboxCtrlrInput.XCI.GetAxisRaw(
