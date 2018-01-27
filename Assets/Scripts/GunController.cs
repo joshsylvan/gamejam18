@@ -114,7 +114,7 @@ public class GunController : MonoBehaviour {
 			if (pistolAmmo > 0) {											//if you have remaining pistol ammo
 				if (timeElapsedSinceLastShot > pistolFireRateSeconds) {		//and if enough time has passed that you can shoot again
 
-					GameObject newBullet = Instantiate (pistolBullet, /*this.transform.GetChild (0).transform*/this.transform.root) as GameObject;	//instantiate a new bullet
+					GameObject newBullet = Instantiate (pistolBullet, this.transform.GetChild (0).transform) as GameObject;	//instantiate a new bullet
 					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
 					bulletRigidBody.AddForce (-this.transform.up * 400f);
 
