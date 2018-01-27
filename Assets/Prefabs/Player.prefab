@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 114008483717873500}
   - component: {fileID: 50271294607137742}
   - component: {fileID: 60597314388192716}
+  - component: {fileID: 114324549288354544}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -176,7 +177,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!60 &60597314388192716
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -254,6 +255,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pistolBullet: {fileID: 1726448181502398, guid: ab8611cf3e93049a7a072befc1388bcf,
     type: 2}
+  shotgunBullet: {fileID: 0}
+  ammoUI: {fileID: 0}
 --- !u!114 &114308013683277756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -263,6 +266,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b1b637404a079454c97234857d1d3f0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114324549288354544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1424122990785526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f1262f8d92341ef8e029724af5cb97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!212 &212012716029316598
