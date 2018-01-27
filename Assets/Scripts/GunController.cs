@@ -9,10 +9,29 @@ public class GunController : MonoBehaviour {
 	private gunType thisGunType = gunType.pistol;
 
 	public GameObject pistolBullet;
+	public GameObject shotgunBullet;
 
+	private bool pistolObtained = true;
+	public bool PistolObtained {
+		get {return pistolObtained;}
+	}
+	private bool shotgunObtained;
+	public bool ShotgunObtained {
+		get {return shotgunObtained;}
+	}
 
+	private int pistolAmmo = 10;
+	public int PistolAmmo {
+		get {return pistolAmmo;}
+	}
+	private int shotgunAmmo = 0;
+	public int ShotgunAmmo {
+		get {return shotgunAmmo;}
+	}
 
-	private float pistolFireRateSeconds = 0.5f;
+	private float pistolFireRateSeconds = 0.5f;		//how often you can fire a bullet
+	private float shotgunFireRateSeconds = 0.9f;
+
 
 	private float timeElapsedSinceLastShot;
 
@@ -29,22 +48,27 @@ public class GunController : MonoBehaviour {
 		float xJoyStixDirection = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickX);
 		float yJoyStixDirection = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickY);
 
+		float rightTriggerPressed = XboxCtrlrInput.XCI.GetAxis (XboxCtrlrInput.XboxAxis.RightTrigger);
+
+		Debug.Log ("rightTriggerPressed: " + rightTriggerPressed);
+
+		if (rightTriggerPressed > 0.3f) {																						//if the player is holding down the right trigger
+			if (yJoyStixDirection > 0.5 || yJoyStixDirection < -0.5 || xJoyStixDirection > 0.5 || xJoyStixDirection < -0.5) {	//and if the player is holding the joystick to shoot
+
+				float angle = Mathf.Atan2 (yJoyStixDirection, xJoyStixDirection);			//then calculate the angle at which the right joystick is rotated towards
+				Vector3 gunRotation = new Vector3 (0, 0, angle * Mathf.Rad2Deg + 90);
+
+				transform.rotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);	//and as the player is currently shooting rotate the gun to this angle
 
 
-
-		if (yJoyStixDirection > 0.5 || yJoyStixDirection < -0.5 || xJoyStixDirection > 0.5 || xJoyStixDirection < -0.5) {	//if the player is holding the joystick to shoot
-
-			float angle = Mathf.Atan2 (yJoyStixDirection, xJoyStixDirection);			//then calculate the angle at which the right joystick is rotated towards
-			Vector3 gunRotation = new Vector3 (0,0,angle * Mathf.Rad2Deg + 90);
-
-			transform.rotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);	//and as the player is currently shooting rotate the gun to this angle
-
-
-			FireGun ();
-		} else {
+				FireGun ();
+			}
+		}
+		else {
 			//TODO: turn torch on
 		}
 	}
+
 
 
 
@@ -52,13 +76,16 @@ public class GunController : MonoBehaviour {
 		switch (thisGunType) {
 
 		case gunType.pistol:
+			if (pistolAmmo > 0) {											//if you have remaining pistol ammo
+				if (timeElapsedSinceLastShot > pistolFireRateSeconds) {		//and if enough time has passed that you can shoot again
 
-			if (timeElapsedSinceLastShot > pistolFireRateSeconds) {
+					GameObject newBullet = Instantiate (pistolBullet, this.transform.GetChild (0).transform) as GameObject;	//instantiate a new bullet
+					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
+					bulletRigidBody.AddForce (-this.transform.up * 400f);
 
-				GameObject newBullet = Instantiate (pistolBullet, this.transform.GetChild(0).transform) as GameObject;	//instantiate a new bullet
-				Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
-				bulletRigidBody.AddForce (-this.transform.up * 400f);
-				timeElapsedSinceLastShot = 0;														//reset the time counter
+					pistolAmmo--;
+					timeElapsedSinceLastShot = 0;														//reset the time counter
+				}
 			}
 			break;
 
