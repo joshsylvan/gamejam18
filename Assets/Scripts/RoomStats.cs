@@ -26,8 +26,18 @@ public class RoomStats : MonoBehaviour
 	void Update () {
 		if (trap1)
 		{
-			
 			animtrap1.SetTrigger("Open");
+		}
+
+		if (trap2)
+		{
+			if (trap2Object.CompareTag("Multi"))
+			{
+				for (int i = 0; i < trap2Object.transform.childCount; i++)
+				{
+					trap2Object.transform.GetChild(i).GetComponent<Animator>().SetTrigger("Open");
+				}
+			}
 		}
 	}
 
