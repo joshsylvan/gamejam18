@@ -59,11 +59,17 @@ public class GunController : MonoBehaviour {
 		float xJoyStixDirection = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickX);
 		float yJoyStixDirection = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickY);
 
+
+		Vector2 inputCircleRight = new Vector2(
+			xJoyStixDirection * Mathf.Sqrt(1 - yJoyStixDirection * yJoyStixDirection * 0.5f),
+			yJoyStixDirection * Mathf.Sqrt(1 - xJoyStixDirection * xJoyStixDirection * 0.5f)
+		);
+
 		float rightTriggerPressed = XboxCtrlrInput.XCI.GetAxis (XboxCtrlrInput.XboxAxis.RightTrigger);
 
 //		Debug.Log ("rightTriggerPressed: " + rightTriggerPressed);
 
-		float angle = Mathf.Atan2 (yJoyStixDirection, xJoyStixDirection);			//then calculate the angle at which the right joystick is rotated towards
+		float angle = Mathf.Atan2 (inputCircleRight.y, inputCircleRight.x);			//then calculate the angle at which the right joystick is rotated towards
 		Vector3 gunRotation = new Vector3 (0, 0, angle * Mathf.Rad2Deg + 90);
 
 		transform.rotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);	//and as the player is currently shooting rotate the gun to this angle
@@ -136,15 +142,24 @@ public class GunController : MonoBehaviour {
 			if (shotgunAmmo > 0) {											//if you have remaining pistol ammo
 				if (timeElapsedSinceLastShot > shotgunFireRateSeconds) {		//and if enough time has passed that you can shoot again
 
+					//forwards bullet
 					GameObject newBullet = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
 					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
 					bulletRigidBody.AddForce (-this.transform.up * 60f);
 					Debug.Log (transform.up);
 
+					GameObject newBullet1 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
+					Rigidbody2D bulletRigidBody1 = newBullet1.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
+					bulletRigidBody1.AddForce (-this.transform.up * 60f);
+					Debug.Log (transform.right);
+
+					GameObject newBullet2 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
+					Rigidbody2D bulletRigidBody2 = newBullet2.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
+					bulletRigidBody2.AddForce (-this.transform.up * 60f);
+					Debug.Log (-transform.right);
+
 					shotgunAmmo--;
 					timeElapsedSinceLastShot = 0;	
-
-
 				}
 			}
 
