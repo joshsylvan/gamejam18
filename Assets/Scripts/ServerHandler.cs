@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using WebSocketSharp;
 
 public class ServerHandler : MonoBehaviour {
 
@@ -14,16 +16,22 @@ public class ServerHandler : MonoBehaviour {
 	private string urlUpload = "https://gamejamserver.herokuapp.com/command";
 	private WWW response;
 	private ServerResponce sr;
+	private WebSocket ws;
 	
 	void Start () 
 	{
-		GetServerInformation();
+//		GetServerInformation();
 	}
 
-	public void GetServerInformation()
+	private void Update()
 	{
-		WWW www = new WWW(url);
-		StartCoroutine(UploadData(10, 1, 1));
+//		throw new System.NotImplementedException();
+	}
+
+	public void GetServerInformation(string message)
+	{
+//		WWW www = new WWW(url);
+//		StartCoroutine(UploadData(message));
 	}
 	
 	IEnumerator WaitForRequest(WWW www)
@@ -45,28 +53,30 @@ public class ServerHandler : MonoBehaviour {
 			Debug.Log("WWW Error: "+ www.error);
 		}    
 	}
-	
-	IEnumerator UploadData(int health, float x, float y) {
-		WWWForm form = new WWWForm();
 
-		using (UnityWebRequest www = UnityWebRequest.Post("https://gamejamserver.herokuapp.com/command?name=josh", form))
+	public IEnumerator UploadData()
+	{
+		using (ws = new WebSocket("wss://gamejamserverwebsocket.herokuapp.com/ws"))
 		{
-			yield return www.Send();
+			ws.OnMessage += (sender, e) =>
+				Debug.Log(e.Data);
 
-			if (www.isNetworkError || www.isHttpError)
+			ws.Connect();
+//			ws.Send("{\"handle\": \"Josh\", \"text\": \"Also Fuck Dave\"}");
+			
+			while (true)
 			{
-				Debug.Log(www.error);
+				if (!ws.IsAlive)
+				{
+					ws.Connect();
+				}
+				string msg = this.GetComponent<GameManager>().CreateJson();
+				ws.Send(msg);
+				Debug.Log(msg + " \n " + System.DateTime.Now);
+				yield return new WaitForSeconds(5);
 			}
-			else
-			{
-				Debug.Log("Form upload complete!");
-			}
+//			Debug.Log(System.DateTime.Now);
 		}
 	}
 
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

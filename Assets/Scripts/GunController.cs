@@ -77,7 +77,7 @@ public class GunController : MonoBehaviour {
 		}
 
 
-		Debug.Log("y: " + XboxCtrlrInput.XCI.GetButtonDown(XboxCtrlrInput.XboxButton.Y));
+		
 
 		if (XboxCtrlrInput.XCI.GetButtonDown (XboxCtrlrInput.XboxButton.Y)) {		//if Y button is pressed
 
