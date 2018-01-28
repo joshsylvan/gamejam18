@@ -24,49 +24,41 @@ public class PlayerMovement : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
+		if (PlayerHealth.isPlayerAlive) {
+			
+			xAxis = XboxCtrlrInput.XCI.GetAxis (XboxCtrlrInput.XboxAxis.LeftStickX);
+		
+			yAxis = XboxCtrlrInput.XCI.GetAxis (XboxCtrlrInput.XboxAxis.LeftStickY);
+		
+			this.anim.SetFloat ("xAxis", xAxis);
+		
+			this.anim.SetFloat ("yAxis", yAxis);
 
-		xAxis = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickX);
+			// Detects when player is idle
+			if (xAxis == 0 && yAxis == 0) {
+				this.anim.SetBool ("Idle", true);
+			} else {
+				this.anim.SetBool ("Idle", false);
+			}
 		
-		yAxis = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickY);
-		
-		this.anim.SetFloat("xAxis", xAxis);
-		
-		this.anim.SetFloat("yAxis", yAxis);
-
-		// Detects when player is idle
-		if (xAxis == 0 && yAxis == 0)
-		{
-			this.anim.SetBool("Idle", true);
-		}
-		else
-		{
-			this.anim.SetBool("Idle", false);
-		}
-		
-		// Detects player direction
-		if (xAxis == 1)
-		{
-			this.anim.SetFloat("idleX", 1);
-			this.anim.SetFloat("idleY", 0);
-			direction = playerDirection.right;
-		}
-		else if (xAxis == -1)
-		{
-			this.anim.SetFloat("idleX", -1);
-			this.anim.SetFloat("idleY", 0);
-			direction = playerDirection.left;
-		}
-		else if (yAxis == 1)
-		{
-			this.anim.SetFloat("idleX", 0);
-			this.anim.SetFloat("idleY", 1);
-			direction = playerDirection.down;
-		} 
-		else if (yAxis == -1)
-		{
-			this.anim.SetFloat("idleX", 0);
-			this.anim.SetFloat("idleY", -1);
-			direction = playerDirection.up;
+			// Detects player direction
+			if (xAxis == 1) {
+				this.anim.SetFloat ("idleX", 1);
+				this.anim.SetFloat ("idleY", 0);
+				direction = playerDirection.right;
+			} else if (xAxis == -1) {
+				this.anim.SetFloat ("idleX", -1);
+				this.anim.SetFloat ("idleY", 0);
+				direction = playerDirection.left;
+			} else if (yAxis == 1) {
+				this.anim.SetFloat ("idleX", 0);
+				this.anim.SetFloat ("idleY", 1);
+				direction = playerDirection.down;
+			} else if (yAxis == -1) {
+				this.anim.SetFloat ("idleX", 0);
+				this.anim.SetFloat ("idleY", -1);
+				direction = playerDirection.up;
+			}
 		}
 	}
 

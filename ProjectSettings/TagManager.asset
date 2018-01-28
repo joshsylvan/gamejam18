@@ -15,10 +15,10 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - Collectable
+  - Bullet
+  - Enemy
+  - Player
   - 
   - 
   - 
