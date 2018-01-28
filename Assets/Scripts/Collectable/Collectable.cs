@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour {
 
-	public enum CollectableType {ammo, heart};
+	public enum CollectableType {ammo, health, armour};
 
 	public CollectableType collectableType;
 //

@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GunController : MonoBehaviour {
 
 	public enum gunType {pistol, shotgun};
 
-	private gunType equippedGunType = gunType.pistol;
+	public gunType equippedGunType = gunType.pistol;
 
 	public GameObject pistolBullet;
 	public GameObject shotgunBullet;
@@ -22,7 +23,7 @@ public class GunController : MonoBehaviour {
 		set {shotgunObtained = value;}
 	}
 
-	private int pistolAmmo = 3;
+	private int pistolAmmo = 10;
 	public int PistolAmmo {
 		get {return pistolAmmo;}
 		set {pistolAmmo = value;}
@@ -42,6 +43,8 @@ public class GunController : MonoBehaviour {
 
 	public GameObject ammoUI;
 
+	public Sprite pistol;
+	public Sprite shotgun;
 
 	// Use this for initialization
 //	void Start () {
@@ -60,13 +63,15 @@ public class GunController : MonoBehaviour {
 
 //		Debug.Log ("rightTriggerPressed: " + rightTriggerPressed);
 
+		float angle = Mathf.Atan2 (yJoyStixDirection, xJoyStixDirection);			//then calculate the angle at which the right joystick is rotated towards
+		Vector3 gunRotation = new Vector3 (0, 0, angle * Mathf.Rad2Deg + 90);
+
+		transform.rotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);	//and as the player is currently shooting rotate the gun to this angle
+
+
 		if (rightTriggerPressed > 0.3f) {																						//if the player is holding down the right trigger
 			if (yJoyStixDirection > 0.5 || yJoyStixDirection < -0.5 || xJoyStixDirection > 0.5 || xJoyStixDirection < -0.5) {	//and if the player is holding the joystick to shoot
 
-				float angle = Mathf.Atan2 (yJoyStixDirection, xJoyStixDirection);			//then calculate the angle at which the right joystick is rotated towards
-				Vector3 gunRotation = new Vector3 (0, 0, angle * Mathf.Rad2Deg + 90);
-
-				transform.rotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);	//and as the player is currently shooting rotate the gun to this angle
 
 
 				FireGun ();
@@ -77,7 +82,11 @@ public class GunController : MonoBehaviour {
 		}
 
 
+<<<<<<< HEAD
 		
+=======
+//		Debug.Log("y: " + XboxCtrlrInput.XCI.GetButtonDown(XboxCtrlrInput.XboxButton.Y));
+>>>>>>> 895827f059b3cdadd85c71783331996dade3c043
 
 		if (XboxCtrlrInput.XCI.GetButtonDown (XboxCtrlrInput.XboxButton.Y)) {		//if Y button is pressed
 
@@ -87,6 +96,9 @@ public class GunController : MonoBehaviour {
 
 				ammoUI.transform.GetChild (0).gameObject.SetActive (false);
 				ammoUI.transform.GetChild (1).gameObject.SetActive (true);
+
+				this.transform.GetChild (0).transform.localScale = new Vector3 (0.6f, 0.8f, 0.6f);
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = shotgun;
 			} else if (equippedGunType == gunType.shotgun && pistolObtained) {
 
 				equippedGunType = gunType.pistol;
@@ -94,9 +106,12 @@ public class GunController : MonoBehaviour {
 				ammoUI.transform.GetChild (1).gameObject.SetActive (false);
 				ammoUI.transform.GetChild (0).gameObject.SetActive (true);
 
+				this.transform.GetChild (0).transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
+
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = pistol;
+
 			}
-
-
+				
 			//equippedGunType
 
 		}
@@ -114,9 +129,9 @@ public class GunController : MonoBehaviour {
 			if (pistolAmmo > 0) {											//if you have remaining pistol ammo
 				if (timeElapsedSinceLastShot > pistolFireRateSeconds) {		//and if enough time has passed that you can shoot again
 
-					GameObject newBullet = Instantiate (pistolBullet, this.transform.GetChild (0).transform) as GameObject;	//instantiate a new bullet
+					GameObject newBullet = Instantiate (pistolBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
 					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
-					bulletRigidBody.AddForce (-this.transform.up * 400f);
+					bulletRigidBody.AddForce (-this.transform.up * 60f);
 
 					pistolAmmo--;
 					timeElapsedSinceLastShot = 0;														//reset the time counter
@@ -128,7 +143,13 @@ public class GunController : MonoBehaviour {
 			if (shotgunAmmo > 0) {											//if you have remaining pistol ammo
 				if (timeElapsedSinceLastShot > shotgunFireRateSeconds) {		//and if enough time has passed that you can shoot again
 
+					GameObject newBullet = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
+					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
+					bulletRigidBody.AddForce (-this.transform.up * 60f);
+					Debug.Log (transform.up);
 
+					shotgunAmmo--;
+					timeElapsedSinceLastShot = 0;	
 
 
 				}

@@ -4,18 +4,7 @@ using UnityEngine;
 
 public class PlayerCollisionDetection : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-
-
-	}
-
+	private bool playerInvincible;
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
@@ -28,6 +17,14 @@ public class PlayerCollisionDetection : MonoBehaviour {
 				CollectedAmmo (coll.gameObject);
 				Debug.Log ("collected ammo");
 				Destroy (coll.gameObject);
+			} else if (collectedCollectable.collectableType == Collectable.CollectableType.health) {
+				gameObject.GetComponent<PlayerHealth> ().IncreaseHealth (coll.gameObject.GetComponent<HealthArmourCollectable> ().healthCount);
+				Debug.Log ("collected health");
+				Destroy (coll.gameObject);
+			} else if (collectedCollectable.collectableType == Collectable.CollectableType.armour) {
+				gameObject.GetComponent<PlayerHealth> ().IncreaseArmour (coll.gameObject.GetComponent<HealthArmourCollectable> ().healthCount);
+				Debug.Log ("collected armour");
+				Destroy (coll.gameObject);
 			}
 
 			break;
@@ -35,11 +32,51 @@ public class PlayerCollisionDetection : MonoBehaviour {
 
 		case "Enemy":
 
+			if (!playerInvincible) {
+
+				GetComponent<PlayerHealth> ().DecreaseHealth (coll.transform.GetComponent<EnemyStats> ().damage);	//apply damage to player
+				StartCoroutine (TriggerImmunity ());
+
+			}
+
+				#region Push enemy that hit the player away
+				var magnitude = 0.2f;
+				var force = transform.position - coll.transform.position;
+				force.Normalize ();
+				coll.transform.GetComponent<Rigidbody2D> ().AddForce (-force * magnitude);
+				#endregion
+
 			break;
+
+			}
+
 
 		}
 
 
+
+
+	private IEnumerator TriggerImmunity() {
+		float timeElapsed = 0f;
+		playerInvincible = true;
+		while (timeElapsed < 1.0f) {
+			if (PlayerHealth.isPlayerAlive) {
+				transform.GetComponent<SpriteRenderer> ().color = new Color32 (255, 0, 0, 255);
+
+				yield return new WaitForSeconds (0.1f);
+
+				transform.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
+
+				yield return new WaitForSeconds (0.1f);
+
+				timeElapsed += 0.2f;
+			} else {
+				timeElapsed = 1f;
+			}
+		}
+
+		transform.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
+		playerInvincible = false;
 	}
 
 

@@ -39,45 +39,42 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-//		Debug.Log (XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickX));
-//		Debug.Log (XboxCtrlrInput.XboxAxis.LeftTrigger);
+		Debug.Log ("PlayerHealth.isPlayerAlive: " + PlayerHealth.isPlayerAlive);
+		if (PlayerHealth.isPlayerAlive) {
 
-//		XboxCtrlrInput.XCI.GetAxisRaw(
+			float movementHorizontal = Input.GetAxis ("Horizontal");
+			float movementVertical = Input.GetAxis ("Vertical");
 
-		float movementHorizontal = Input.GetAxis ("Horizontal");
-//		Debug.Log (movementHorizontal);
-		float movementVertical = Input.GetAxis ("Vertical");
+			Vector2 movement = new Vector2 (movementHorizontal, movementVertical);
 
-		Vector2 movement = new Vector2(movementHorizontal, movementVertical);
+			#region Work out direction player is be facing
 
-		#region Work out direction player is be facing
-
-		if (movementHorizontal > 0 && movementVertical < 0.2 && movementVertical > -0.2) {
-			direction = playerDirection.right;
-		} else if (movementHorizontal < 0 && movementHorizontal < 0.2 && movementHorizontal > -0.2) {
-			direction = playerDirection.left;
-		} else if (movementVertical > 0 && movementHorizontal < 0.2 && movementHorizontal > -0.2) {
-			direction = playerDirection.back;
-		} else if (movementVertical < 0 && movementHorizontal < 0.2 && movementHorizontal > -0.2) {
-			direction = playerDirection.front;
-		} 
+			if (movementHorizontal > 0 && movementVertical < 0.2 && movementVertical > -0.2) {
+				direction = playerDirection.right;
+			} else if (movementHorizontal < 0 && movementHorizontal < 0.2 && movementHorizontal > -0.2) {
+				direction = playerDirection.left;
+			} else if (movementVertical > 0 && movementHorizontal < 0.2 && movementHorizontal > -0.2) {
+				direction = playerDirection.back;
+			} else if (movementVertical < 0 && movementHorizontal < 0.2 && movementHorizontal > -0.2) {
+				direction = playerDirection.front;
+			} 
 
 
-		#endregion
+			#endregion
 
 
-		#region Update sprite according to whether idle or moving
-		if (movementHorizontal != 0 || movementVertical != 0) {			//if the player is moving
-			UpdateSpriteToMoving ();									//then call method to update sprite to moving
-			currentIdleSpriteIndex = 0;
-		} else {														//else 
-			UpdateSpriteIdle ();										//
+			#region Update sprite according to whether idle or moving
+			if (movementHorizontal != 0 || movementVertical != 0) {			//if the player is moving
+				UpdateSpriteToMoving ();									//then call method to update sprite to moving
+				currentIdleSpriteIndex = 0;
+			} else {														//else 
+				UpdateSpriteIdle ();										//
+			}
+
+			#endregion
+
+			rigidBody.AddForce (movement * movementSpeed);
 		}
-
-		#endregion
-
-		rigidBody.AddForce (movement * movementSpeed);
-
 	}
 
 
