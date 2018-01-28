@@ -35,7 +35,11 @@ public class RoomStats : MonoBehaviour
 //		SpawnMonster();
 		if (trap1)
 		{
-			trap1Object.GetComponent<OverTrapHandler>().trapActive = true;
+			if (trap1Object.name != "Walls")
+			{
+				trap1Object.GetComponent<OverTrapHandler>().trapActive = true;
+			}
+
 			animtrap1.SetTrigger("Open");
 		}
 

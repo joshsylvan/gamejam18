@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 	private RoomManager roomManager;
 	private ServerResponce sr;
 
-	public RoomStats dungeon, bathroom, corridor1, playroom; 
+	public RoomStats dungeon, bathroom, corridor1, playroom, cinema, coffee, corridor2, bedroom; 
 
 	private string jsonToSend = "";
 	// Use this for initialization
@@ -41,6 +41,18 @@ public class GameManager : MonoBehaviour
 					break;
 				case "playroom":
 					UpdateRoom(playroom);
+					break;
+				case "cinema":
+					UpdateRoom(cinema);
+					break;
+				case "coffee":
+					UpdateRoom(coffee);
+					break;
+				case "corridor2":
+					UpdateRoom(corridor2);
+					break;
+				case "bedroom":
+					UpdateRoom(bedroom);
 					break;
 			}
 		}
