@@ -34,7 +34,7 @@ public class TorchControl : MonoBehaviour
 
 
 		if (Mathf.Abs(inputCircleRight.x) > 0.5f || Mathf.Abs(inputCircleRight.y) >0.5f) {	//if the player is holding the joystick to shoot
-			Debug.Log(inputCircleRight);
+//			Debug.Log(inputCircleRight);
 		
 			float angle = Mathf.Atan2 (inputCircleRight.y, inputCircleRight.x);			//then calculate the angle at which the right joystick is rotated towards
 			lastRotation = Quaternion.Euler(0, angle * Mathf.Rad2Deg + 90, 0);
