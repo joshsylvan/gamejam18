@@ -81,13 +81,6 @@ public class GunController : MonoBehaviour {
 			//TODO: turn torch on
 		}
 
-
-<<<<<<< HEAD
-		
-=======
-//		Debug.Log("y: " + XboxCtrlrInput.XCI.GetButtonDown(XboxCtrlrInput.XboxButton.Y));
->>>>>>> 895827f059b3cdadd85c71783331996dade3c043
-
 		if (XboxCtrlrInput.XCI.GetButtonDown (XboxCtrlrInput.XboxButton.Y)) {		//if Y button is pressed
 
 			if (equippedGunType == gunType.pistol && shotgunObtained) {		//if pistol is equipped and also have a shotgun

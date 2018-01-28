@@ -5,6 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 	private RoomManager roomManager;
+	private ServerResponce sr;
+
+	public RoomStats dungeon, bathroom, corridor1; 
 
 	private string jsonToSend = "";
 	// Use this for initialization
@@ -20,6 +23,41 @@ public class GameManager : MonoBehaviour
 		
 	}
 
+	public void GetResponse(string data)
+	{
+		sr = JsonUtility.FromJson<ServerResponce>(data);
+		if (sr.room != null)
+		{
+			switch (sr.room)
+			{
+				case "dungeon":
+					UpdateRoom(dungeon);
+					break;
+				case "bathroom":
+					UpdateRoom(bathroom);
+					break;
+				case "corridor":
+					UpdateRoom(corridor1);
+					break;
+			}
+		}
+	}
+	
+	public void UpdateRoom(RoomStats room)
+	{
+		
+		if (sr.trap1.Equals("true"))
+		{
+			room.TriggerTrap1();
+		}
+
+		if (sr.trap2.Equals("true"))
+		{
+			room.TriggerTrap2();
+		}
+		
+	}	
+	
 	public string CreateJson()
 	{
 		jsonToSend = "{ \"rooms\": [";

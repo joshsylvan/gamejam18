@@ -17,7 +17,13 @@ public class ServerHandler : MonoBehaviour {
 	private WWW response;
 	private ServerResponce sr;
 	private WebSocket ws;
-	
+	private GameManager gm;
+
+	private void Awake()
+	{
+		gm = this.GetComponent<GameManager>();
+	}
+
 	void Start () 
 	{
 //		GetServerInformation();
@@ -33,33 +39,13 @@ public class ServerHandler : MonoBehaviour {
 //		WWW www = new WWW(url);
 //		StartCoroutine(UploadData(message));
 	}
-	
-	IEnumerator WaitForRequest(WWW www)
-	{
-		yield return www;
-		// check for errors
-		if (www.error == null)
-		{
-			response = www;
-//			string jsonString;
-//			jsonString = System.Text.Encoding.UTF8.GetString(response.bytes, 3, response.bytes.Length - 3);
 
-//			ServerResponce json = JsonUtility.FromJson<ServerResponce>(jsonString);
-			sr = JsonUtility.FromJson<ServerResponce>(response.text);
-			Debug.Log("WWW Ok!: " + sr.login);
-		} 
-		else
-		{
-			Debug.Log("WWW Error: "+ www.error);
-		}    
-	}
 
 	public IEnumerator UploadData()
 	{
 		using (ws = new WebSocket("wss://gamejamserverwebsocket.herokuapp.com/ws"))
 		{
-			ws.OnMessage += (sender, e) =>
-				Debug.Log(e.Data);
+			ws.OnMessage += (sender, e) => gm.GetResponse(e.Data);
 
 			ws.Connect();
 //			ws.Send("{\"handle\": \"Josh\", \"text\": \"Also Fuck Dave\"}");

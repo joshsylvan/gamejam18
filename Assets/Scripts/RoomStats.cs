@@ -9,15 +9,26 @@ public class RoomStats : MonoBehaviour
 	public string trap1Name, trap2Name;
 	public int startX, startY, endX, endY;
 	private bool isPlayerHere;
+
+	public GameObject trap1Object, trap2Object;
+	public Animator animtrap1, animtrap2;
 	
 	// Use this for initialization
-	void Start () {
-		
+	void Start ()
+	{
+		if (this.trap1Object != null)
+		{
+			this.animtrap1 = trap1Object.GetComponent<Animator>();
+		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (trap1)
+		{
+			
+			animtrap1.SetTrigger("Open");
+		}
 	}
 
 	public void Init()
@@ -30,12 +41,12 @@ public class RoomStats : MonoBehaviour
 	public void TriggerTrap1()
 	{
 		trap1 = true;
-		trap2 = false;
+		
 	}
 
 	public void TriggerTrap2()
 	{
-		
+		trap2 = true;
 	}
 
 	public bool HasTrap1BeenUsed()
