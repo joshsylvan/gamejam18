@@ -5,6 +5,10 @@ using UnityEngine;
 public class PistolBullet : MonoBehaviour {
 
 	public float damage;
+	public bool isRocket;
+
+	public GameObject explosion01;
+	public GameObject explosion02;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +27,8 @@ public class PistolBullet : MonoBehaviour {
 
 		switch (other.gameObject.tag) {
 
+//		Vector3 transform = other.gameObject.
+
 		case "Enemy": 
 			other.gameObject.GetComponent<EnemyStats> ().Health -= damage;
 
@@ -38,6 +44,18 @@ public class PistolBullet : MonoBehaviour {
 		case "Wall":
 			Destroy (this.gameObject);		//hits the walls and breaks
 			break;
+		}
+
+		if (isRocket) {
+			int explosionSelect = Random.Range (0, 2);
+
+			if (explosionSelect == 0) {
+				GameObject explosion = Instantiate (explosion01, this.transform.position, Quaternion.identity) as GameObject;	//instantiate a new bullet
+				Destroy (explosion, 1f);
+			} else if (explosionSelect == 1) {
+				GameObject explosion = Instantiate (explosion02, this.transform.position, Quaternion.identity) as GameObject;	//instantiate a new bullet
+				Destroy (explosion, 1f);
+			}
 		}
 	}
 
