@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class GunController : MonoBehaviour {
 
-	public enum gunType {pistol, shotgun};
+	public enum gunType {pistol, shotgun, rocket};
 
 	public gunType equippedGunType = gunType.pistol;
 
 	public GameObject pistolBullet;
 	public GameObject shotgunBullet;
+	public GameObject rocketBullet;
 
 	private bool pistolObtained = true;
 	public bool PistolObtained {
@@ -21,6 +22,11 @@ public class GunController : MonoBehaviour {
 	public bool ShotgunObtained {
 		get {return shotgunObtained;}
 		set {shotgunObtained = value;}
+	}
+	private bool rocketObtained;
+	public bool RocketObtained {
+		get {return rocketObtained;}
+		set {rocketObtained = value;}
 	}
 
 	private int pistolAmmo = 10;
@@ -34,21 +40,28 @@ public class GunController : MonoBehaviour {
 		get {return shotgunAmmo;}
 		set {shotgunAmmo = shotgunAmmo + value;}
 	}
+	private int rocketAmmo = 0;
+	public int RocketAmmo {
+		get {return rocketAmmo;}
+		set {rocketAmmo = rocketAmmo + value;}
+	}
 
 	private float pistolFireRateSeconds = 0.5f;		//how often you can fire a bullet
 	private float shotgunFireRateSeconds = 0.9f;
+	private float rocketFireRateSeconds = 1.4f;
 
 
 	private float timeElapsedSinceLastShot;
 
 	public GameObject ammoUI;
 
-	public Sprite pistol;
-	public Sprite shotgun;
+	public Sprite pistolSprite;
+	public Sprite shotgunSprite;
+	public Sprite rocketSprite;
 
 	private Quaternion lastRotation;
 
-	public float pistolSpeed = 100f, shotgunSpeed = 100f;
+	public float pistolSpeed = 100f, shotgunSpeed = 100f, rocketSpeed = 100f;
 	
 	// Use this for initialization
 //	void Start () {
@@ -121,20 +134,45 @@ public class GunController : MonoBehaviour {
 
 				ammoUI.transform.GetChild (0).gameObject.SetActive (false);
 				ammoUI.transform.GetChild (1).gameObject.SetActive (true);
+				ammoUI.transform.GetChild (6).gameObject.SetActive (false);
 
 				this.transform.GetChild (0).transform.localScale = new Vector3 (0.6f, 0.8f, 0.6f);
-				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = shotgun;
-			} else if (equippedGunType == gunType.shotgun && pistolObtained) {
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = shotgunSprite;
 
+			} else if (equippedGunType == gunType.pistol && rocketObtained) {
+				equippedGunType = gunType.rocket;
+
+				ammoUI.transform.GetChild (0).gameObject.SetActive (false);
+				ammoUI.transform.GetChild (1).gameObject.SetActive (false);
+				ammoUI.transform.GetChild (6).gameObject.SetActive (true);
+
+
+				this.transform.GetChild (0).transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = rocketSprite;
+
+			} else if (equippedGunType == gunType.shotgun && rocketObtained) {
+
+				equippedGunType = gunType.rocket;
+
+				ammoUI.transform.GetChild (1).gameObject.SetActive (false);
+				ammoUI.transform.GetChild (0).gameObject.SetActive (false);
+				ammoUI.transform.GetChild (6).gameObject.SetActive (true);
+
+
+				this.transform.GetChild (0).transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
+
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = rocketSprite;
+			} else /*change from shotgun to pistol*/{
 				equippedGunType = gunType.pistol;
 
 				ammoUI.transform.GetChild (1).gameObject.SetActive (false);
 				ammoUI.transform.GetChild (0).gameObject.SetActive (true);
+				ammoUI.transform.GetChild (6).gameObject.SetActive (false);
+
 
 				this.transform.GetChild (0).transform.localScale = new Vector3 (0.6f, 0.6f, 0.6f);
 
-				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = pistol;
-
+				this.transform.GetChild (0).GetComponent<SpriteRenderer> ().sprite = pistolSprite;
 			}
 				
 			//equippedGunType
@@ -189,9 +227,30 @@ public class GunController : MonoBehaviour {
 					}
 				
 				}
-
 			break;
 
+		case gunType.rocket:
+			if (rocketAmmo > 0) {											//if you have remaining pistol ammo
+				if (timeElapsedSinceLastShot > rocketFireRateSeconds) {		//and if enough time has passed that you can shoot again
+
+					GameObject newBullet = Instantiate (rocketBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
+
+					newBullet.GetComponent<PistolBullet> ().isRocket = true;
+
+					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
+					Debug.Log (this.transform.localEulerAngles.z);
+
+					newBullet.transform.localEulerAngles = new Vector3(0,0,this.transform.localEulerAngles.z-90);	//rotate to face direction
+//					Debug.Log (newBullet.transform.localEulerAngles);
+					bulletRigidBody.AddForce (-this.transform.up * rocketSpeed);
+
+					rocketAmmo--;
+					timeElapsedSinceLastShot = 0;														//reset the time counter
+				}
+			}
+
+
+			break;
 		}
 	}
 }

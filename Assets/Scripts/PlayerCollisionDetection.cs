@@ -132,6 +132,10 @@ public class PlayerCollisionDetection : MonoBehaviour {
 			gunController.ShotgunAmmo += colAmmo.ammoCount;
 			gunController.ShotgunObtained = true;
 		}
+		else if (CollectedItem.GetComponent<CollectableAmmo>().type == GunController.gunType.rocket) {
+			gunController.RocketAmmo += colAmmo.ammoCount;
+			gunController.RocketObtained = true;
+		}
 
 	}
 
