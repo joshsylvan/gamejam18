@@ -46,6 +46,10 @@ public class GunController : MonoBehaviour {
 	public Sprite pistol;
 	public Sprite shotgun;
 
+	private Quaternion lastRotation;
+
+	public float pistolSpeed = 100f, shotgunSpeed = 100f;
+	
 	// Use this for initialization
 //	void Start () {
 //		
@@ -59,33 +63,55 @@ public class GunController : MonoBehaviour {
 		float xJoyStixDirection = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickX);
 		float yJoyStixDirection = XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickY);
 
+		
+		Vector2 rightStick = new Vector2(XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickX), XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.RightStickY));
+		Vector2 leftStick = new Vector2(XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickX), XboxCtrlrInput.XCI.GetAxis(XboxCtrlrInput.XboxAxis.LeftStickY));
 
+		
 		Vector2 inputCircleRight = new Vector2(
-			xJoyStixDirection * Mathf.Sqrt(1 - yJoyStixDirection * yJoyStixDirection * 0.5f),
-			yJoyStixDirection * Mathf.Sqrt(1 - xJoyStixDirection * xJoyStixDirection * 0.5f)
+			rightStick.x * Mathf.Sqrt(1 - rightStick.y * rightStick.y * 0.5f),
+			rightStick.y * Mathf.Sqrt(1 - rightStick.x * rightStick.x * 0.5f)
+		);
+		Vector2 inputCircleLeft = new Vector2(
+			leftStick.x * Mathf.Sqrt(1 - leftStick.y * leftStick.y * 0.5f),
+			leftStick.y * Mathf.Sqrt(1 - leftStick.x * leftStick.x * 0.5f)
 		);
 
 		float rightTriggerPressed = XboxCtrlrInput.XCI.GetAxis (XboxCtrlrInput.XboxAxis.RightTrigger);
 
 //		Debug.Log ("rightTriggerPressed: " + rightTriggerPressed);
 
-		float angle = Mathf.Atan2 (inputCircleRight.y, inputCircleRight.x);			//then calculate the angle at which the right joystick is rotated towards
-		Vector3 gunRotation = new Vector3 (0, 0, angle * Mathf.Rad2Deg + 90);
-
-		transform.rotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);	//and as the player is currently shooting rotate the gun to this angle
+			//and as the player is currently shooting rotate the gun to this angle
 
 
 		if (rightTriggerPressed > 0.3f) {																						//if the player is holding down the right trigger
 			if (yJoyStixDirection > 0.5 || yJoyStixDirection < -0.5 || xJoyStixDirection > 0.5 || xJoyStixDirection < -0.5) {	//and if the player is holding the joystick to shoot
 
 
-
 				FireGun ();
 			}
 		}
-		else {
-			//TODO: turn torch on
-		}
+			
+			if (Mathf.Abs(inputCircleRight.x) > 0.5f || Mathf.Abs(inputCircleRight.y) >0.5f) {	//if the player is holding the joystick to shoot
+				Debug.Log(inputCircleRight);
+		
+				float angle = Mathf.Atan2 (inputCircleRight.y, inputCircleRight.x);			//then calculate the angle at which the right joystick is rotated towards
+				lastRotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);
+				transform.localRotation = lastRotation; //and as the player is currently shooting rotate the gun to this angle
+			}
+			else if(Mathf.Abs(inputCircleLeft.x) > 0.5f || Mathf.Abs(inputCircleLeft.y) >0.5f )
+			{	
+				float angle =
+					Mathf.Atan2(-inputCircleLeft.y,
+						inputCircleLeft.x); //then calculate the angle at which the right joystick is rotated towards
+				
+				lastRotation =Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);
+				transform.localRotation = lastRotation;	
+			} 
+			else 
+			{
+				transform.localRotation = lastRotation;
+			}
 
 		if (XboxCtrlrInput.XCI.GetButtonDown (XboxCtrlrInput.XboxButton.Y)) {		//if Y button is pressed
 
@@ -130,7 +156,7 @@ public class GunController : MonoBehaviour {
 
 					GameObject newBullet = Instantiate (pistolBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
 					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
-					bulletRigidBody.AddForce (-this.transform.up * 60f);
+					bulletRigidBody.AddForce (-this.transform.up * pistolSpeed);
 
 					pistolAmmo--;
 					timeElapsedSinceLastShot = 0;														//reset the time counter
@@ -138,30 +164,31 @@ public class GunController : MonoBehaviour {
 			}
 			break;
 
-		case gunType.shotgun:
-			if (shotgunAmmo > 0) {											//if you have remaining pistol ammo
-				if (timeElapsedSinceLastShot > shotgunFireRateSeconds) {		//and if enough time has passed that you can shoot again
+			case gunType.shotgun:
+				if (shotgunAmmo > 0) {                                            //if you have remaining pistol ammo
+					if (timeElapsedSinceLastShot > shotgunFireRateSeconds) {        //and if enough time has passed that you can shoot again
 
-					//forwards bullet
-					GameObject newBullet = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
-					Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
-					bulletRigidBody.AddForce (-this.transform.up * 60f);
-					Debug.Log (transform.up);
+						//forwards bullet
+						GameObject newBullet = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;    //instantiate a new bullet
+						Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();                //get the rigidbody so force can be applied to it
+						bulletRigidBody.AddForce (-this.transform.up * shotgunSpeed*2);
+						Debug.Log (transform.up);
 
-					GameObject newBullet1 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
-					Rigidbody2D bulletRigidBody1 = newBullet1.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
-					bulletRigidBody1.AddForce (-this.transform.up * 60f);
-					Debug.Log (transform.right);
+						GameObject newBullet1 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;    //instantiate a new bullet
+						Rigidbody2D bulletRigidBody1 = newBullet1.GetComponent<Rigidbody2D> ();                //get the rigidbody so force can be applied to it
+						bulletRigidBody1.AddForce ((-this.transform.right - (this.transform.up) - this.transform.up/2) * shotgunSpeed);
+						Debug.Log (transform.right);
 
-					GameObject newBullet2 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;	//instantiate a new bullet
-					Rigidbody2D bulletRigidBody2 = newBullet2.GetComponent<Rigidbody2D> ();				//get the rigidbody so force can be applied to it
-					bulletRigidBody2.AddForce (-this.transform.up * 60f);
-					Debug.Log (-transform.right);
+						GameObject newBullet2 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;    //instantiate a new bullet
+						Rigidbody2D bulletRigidBody2 = newBullet2.GetComponent<Rigidbody2D> ();                //get the rigidbody so force can be applied to it
+						bulletRigidBody2.AddForce ((this.transform.right - this.transform.up - this.transform.up/2) * shotgunSpeed);
+						Debug.Log (-transform.right);
 
-					shotgunAmmo--;
-					timeElapsedSinceLastShot = 0;	
+						shotgunAmmo--;
+						timeElapsedSinceLastShot = 0;    
+					}
+				
 				}
-			}
 
 			break;
 

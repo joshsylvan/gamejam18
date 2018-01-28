@@ -59,7 +59,7 @@ public class ServerHandler : MonoBehaviour {
 				string msg = this.GetComponent<GameManager>().CreateJson();
 				ws.Send(msg);
 				Debug.Log(msg + " \n " + System.DateTime.Now);
-				yield return new WaitForSeconds(1);
+				yield return new WaitForSeconds(5);
 			}
 //			Debug.Log(System.DateTime.Now);
 		}

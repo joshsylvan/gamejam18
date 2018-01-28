@@ -10,12 +10,14 @@ public class RoomStats : MonoBehaviour
 	public int startX, startY, endX, endY;
 	private bool isPlayerHere;
 
-	public GameObject trap1Object, trap2Object;
+	public GameObject trap1Object, trap2Object, monsterSpawn;
 	public Animator animtrap1, animtrap2;
+	private GameObject[] monsters;
 	
 	// Use this for initialization
 	void Start ()
 	{
+		monsters = Resources.LoadAll<GameObject>("Prefab/Monsters");
 		if (this.trap1Object != null)
 		{
 			this.animtrap1 = trap1Object.GetComponent<Animator>();
@@ -23,7 +25,9 @@ public class RoomStats : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+	{
+//		SpawnMonster();
 		if (trap1)
 		{
 			animtrap1.SetTrigger("Open");
@@ -46,6 +50,13 @@ public class RoomStats : MonoBehaviour
 		trap1 = false;
 		trap2 = false;
 		this.type = this.gameObject.name;
+	}
+
+	public void SpawnMonster()
+	{
+		GameObject monster = Instantiate(monsters[Random.RandomRange(0, monsters.Length)]);
+		monster.transform.position =
+			monsterSpawn.transform.GetChild(Random.RandomRange(0, monsterSpawn.transform.childCount)).transform.position;
 	}
 	
 	public void TriggerTrap1()

@@ -38,22 +38,31 @@ public class PlayerCollisionDetection : MonoBehaviour {
 				StartCoroutine (TriggerImmunity ());
 
 			}
-
-				#region Push enemy that hit the player away
-				var magnitude = 0.2f;
-				var force = transform.position - coll.transform.position;
-				force.Normalize ();
-				coll.transform.GetComponent<Rigidbody2D> ().AddForce (-force * magnitude);
-				#endregion
-
+//				#region Push enemy that hit the player away
+//				var magnitude = 0.2f;
+//				var force = transform.position - coll.transform.position;
+//				force.Normalize ();
+//				coll.transform.GetComponent<Rigidbody2D> ().AddForce (-force * magnitude);
+//				#endregion
 			break;
 
 			}
 
 
+	}
+
+	private void OnCollisionStay2D(Collision2D other)
+	{
+		if (other.transform.CompareTag("Enemy"))
+		{
+			if (!playerInvincible) {
+
+				GetComponent<PlayerHealth> ().DecreaseHealth (other.transform.GetComponent<EnemyStats> ().damage);	//apply damage to player
+				StartCoroutine (TriggerImmunity ());
+
+			}
 		}
-
-
+	}
 
 
 	private IEnumerator TriggerImmunity() {

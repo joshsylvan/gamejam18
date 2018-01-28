@@ -33,14 +33,14 @@ public class TorchControl : MonoBehaviour
 //		float yJoyStixDirection2 = leftStick.y;
 
 
-		if (inputCircleRight.x != 0 || inputCircleRight.y != 0) {	//if the player is holding the joystick to shoot
-//		Debug.Log(inputCircleRight);
+		if (Mathf.Abs(inputCircleRight.x) > 0.5f || Mathf.Abs(inputCircleRight.y) >0.5f) {	//if the player is holding the joystick to shoot
+			Debug.Log(inputCircleRight);
 		
 			float angle = Mathf.Atan2 (inputCircleRight.y, inputCircleRight.x);			//then calculate the angle at which the right joystick is rotated towards
-
-			transform.localRotation = Quaternion.Euler ( 0, angle * Mathf.Rad2Deg + 90, 0);	//and as the player is currently shooting rotate the gun to this angle
+			lastRotation = Quaternion.Euler(0, angle * Mathf.Rad2Deg + 90, 0);
+			transform.localRotation = lastRotation; //and as the player is currently shooting rotate the gun to this angle
 		}
-		else if(inputCircleLeft.x != 0 || inputCircleLeft.y != 0 )
+		else if(Mathf.Abs(inputCircleLeft.x) > 0.5f || Mathf.Abs(inputCircleLeft.y) >0.5f )
 		{	
 			float angle =
 				Mathf.Atan2(-inputCircleLeft.y,
