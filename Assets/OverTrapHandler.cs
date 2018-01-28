@@ -9,7 +9,11 @@ public class OverTrapHandler : MonoBehaviour
 	public bool trapActive = false;
 	private GameObject player;
 
+	public bool playOnce = false, lcoked = false;
+
 	private bool playerHere;
+
+	private float countDown = .3f;
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag("Player");
@@ -19,16 +23,31 @@ public class OverTrapHandler : MonoBehaviour
 	void Update () {
 		if (playerHere)
 		{
-			if (trapActive)
-			{
+				if (trapActive)
+				{
+					if (playOnce)
+					{
+						countDown -= Time.deltaTime;
+					}
 					if (!player.GetComponent<PlayerCollisionDetection>().IsPlayerInvincible())
 					{
-						player.GetComponent<PlayerHealth>().DecreaseHealth(1); //apply damage to player
-						StartCoroutine(player.GetComponent<PlayerCollisionDetection>().TriggerImmunity());
+						if (playOnce)
+						{
+							if (countDown <= 0 && !lcoked)
+							{
+								player.GetComponent<PlayerHealth>().DecreaseHealth(1); //apply damage to player
+								StartCoroutine(player.GetComponent<PlayerCollisionDetection>().TriggerImmunity());
+								lcoked = true;
+							}
+						}
+						else
+						{
+							player.GetComponent<PlayerHealth>().DecreaseHealth(1); //apply damage to player
+							StartCoroutine(player.GetComponent<PlayerCollisionDetection>().TriggerImmunity());
+						}
 					}
-				
+				}
 			}
-		}
 	}
 
 	public void SetTrapActive()

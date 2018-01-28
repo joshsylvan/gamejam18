@@ -50,7 +50,17 @@ public class RoomStats : MonoBehaviour
 				for (int i = 0; i < trap2Object.transform.childCount; i++)
 				{
 					trap2Object.transform.GetChild(i).GetComponent<Animator>().SetTrigger("Open");
+					trap2Object.transform.GetChild(i).GetComponent<OverTrapHandler>().trapActive = true;
 				}
+			}
+			else
+			{
+				if (trap2Object.name != "Walls")
+				{
+					trap2Object.GetComponent<OverTrapHandler>().trapActive = true;
+				}
+
+				animtrap2.SetTrigger("Open");
 			}
 		}
 

@@ -28,15 +28,15 @@ public class PlayerCollisionDetection : MonoBehaviour {
 
 			if (collectedCollectable.collectableType == Collectable.CollectableType.ammo) {
 				CollectedAmmo (coll.gameObject);
-				Debug.Log ("collected ammo");
+//				Debug.Log ("collected ammo");
 				Destroy (coll.gameObject);
 			} else if (collectedCollectable.collectableType == Collectable.CollectableType.health) {
 				gameObject.GetComponent<PlayerHealth> ().IncreaseHealth (coll.gameObject.GetComponent<HealthArmourCollectable> ().healthCount);
-				Debug.Log ("collected health");
+//				Debug.Log ("collected health");
 				Destroy (coll.gameObject);
 			} else if (collectedCollectable.collectableType == Collectable.CollectableType.armour) {
 				gameObject.GetComponent<PlayerHealth> ().IncreaseArmour (coll.gameObject.GetComponent<HealthArmourCollectable> ().healthCount);
-				Debug.Log ("collected armour");
+//				Debug.Log ("collected armour");
 				Destroy (coll.gameObject);
 			}
 

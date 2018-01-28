@@ -12,6 +12,12 @@ public class PlayerHealth : MonoBehaviour {
 	}
 
 
+	private void Awake()
+	{
+		isPlayerAlive = true;
+		gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+	}
+
 	public HealthUI healthUI;
 
 	public int health = 6;
@@ -76,7 +82,7 @@ public class PlayerHealth : MonoBehaviour {
 
 
 	private void EndGame() {
-		gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;	//stop playing from sliding
+		gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;	//stop playing from sliding
 		gameObject.GetComponent<Animator> ().SetTrigger ("DeathAnimation");
 		//death animation
 

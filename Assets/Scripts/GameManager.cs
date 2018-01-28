@@ -1,13 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
 	private RoomManager roomManager;
 	private ServerResponce sr;
 
-	public RoomStats dungeon, bathroom, corridor1, playroom, cinema, coffee, corridor2, bedroom; 
+	public RoomStats dungeon, bathroom, corridor1, playroom, cinema, coffee, corridor2, bedroom;
+
+	private float timer = 0f;
+	public Text timerText;
+
+	private bool startEngame = false;
+	private float cooldown = 5f;
 
 	private string jsonToSend = "";
 	// Use this for initialization
@@ -19,8 +27,22 @@ public class GameManager : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update ()
+	{
+		if (PlayerHealth.isPlayerAlive)
+		{
+			timer += Time.deltaTime;
+			timerText.GetComponent<Text>().text = "" + timer.ToString("F1");
+		}
+
+		if (!PlayerHealth.isPlayerAlive)
+		{
+			cooldown -= Time.deltaTime;
+			if (cooldown <= 0)
+			{
+				SceneManager.LoadScene("MapTesting");
+			}
+		}
 	}
 
 	public void GetResponse(string data)
