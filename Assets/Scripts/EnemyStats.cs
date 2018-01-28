@@ -11,12 +11,23 @@ public class EnemyStats : MonoBehaviour {
 	}
 
 	public int damage;
+	
+	private bool wallCrushLeft, wallCrushRight;
 
 
 	public void TriggerDeathAnimation() {
 		StartCoroutine (DeathAnimation ());
 	}
 
+	private void Update()
+	{
+		if (wallCrushLeft && wallCrushRight)
+		{
+			TriggerDeathAnimation();
+			wallCrushLeft = false;
+			wallCrushRight = false;
+		}
+	}
 
 	private IEnumerator DeathAnimation() {
 
@@ -33,9 +44,32 @@ public class EnemyStats : MonoBehaviour {
 		}
 
 		Destroy (this.gameObject);
+	}
 
-
-
+	private void OnCollisionEnter2D(Collision2D other)
+	{
+		switch (other.transform.tag)
+		{
+			case "LeftCrush":
+				wallCrushLeft = true;
+				break;
+			case "RightCrush":
+				wallCrushRight = true;
+				break;	
+		}
+	}
+	
+	private void OnCollisionExit2D(Collision2D other)
+	{
+		switch (other.transform.tag)
+		{
+			case "LeftCrush":
+				wallCrushLeft = false;
+				break;
+			case "RightCrush":
+				wallCrushRight = false;
+				break;	
+		}
 	}
 
 //	// Use this for initialization

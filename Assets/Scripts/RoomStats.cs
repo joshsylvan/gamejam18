@@ -19,9 +19,13 @@ public class RoomStats : MonoBehaviour
 	void Start ()
 	{
 		monsters = Resources.LoadAll<GameObject>("Prefab/Monsters");
-		if (this.trap1Object != null)
+		if (this.trap1Object != null && !this.trap1Object.CompareTag("Multi"))
 		{
 			this.animtrap1 = trap1Object.GetComponent<Animator>();
+		}
+		if (this.trap2Object != null && !this.trap2Object.CompareTag("Multi"))
+		{
+			this.animtrap2 = trap2Object.GetComponent<Animator>();
 		}
 	}
 	
@@ -31,6 +35,7 @@ public class RoomStats : MonoBehaviour
 //		SpawnMonster();
 		if (trap1)
 		{
+			trap1Object.GetComponent<OverTrapHandler>().trapActive = true;
 			animtrap1.SetTrigger("Open");
 		}
 
@@ -69,7 +74,6 @@ public class RoomStats : MonoBehaviour
 	public void TriggerTrap1()
 	{
 		trap1 = true;
-		
 	}
 
 	public void TriggerTrap2()

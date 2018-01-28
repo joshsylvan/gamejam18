@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Networking;
 using WebSocketSharp;
 
 public class ServerHandler : MonoBehaviour {
@@ -59,7 +55,7 @@ public class ServerHandler : MonoBehaviour {
 				string msg = this.GetComponent<GameManager>().CreateJson();
 				ws.Send(msg);
 				Debug.Log(msg + " \n " + System.DateTime.Now);
-				yield return new WaitForSeconds(5);
+				yield return new WaitForSeconds(1);
 			}
 //			Debug.Log(System.DateTime.Now);
 		}

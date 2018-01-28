@@ -5,6 +5,19 @@ using UnityEngine;
 public class PlayerCollisionDetection : MonoBehaviour {
 
 	private bool playerInvincible;
+	private bool wallCrushLeft = false, wallCrushRight = false;
+
+
+	private void Update()
+	{
+		if (wallCrushLeft && wallCrushRight)
+		{
+			GetComponent<PlayerHealth> ().DecreaseHealth (1);	//apply damage to player
+			StartCoroutine (TriggerImmunity ());
+			wallCrushLeft = false;
+			wallCrushRight = false;
+		}
+	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
 
@@ -31,22 +44,21 @@ public class PlayerCollisionDetection : MonoBehaviour {
 
 
 		case "Enemy":
-
 			if (!playerInvincible) {
 
 				GetComponent<PlayerHealth> ().DecreaseHealth (coll.transform.GetComponent<EnemyStats> ().damage);	//apply damage to player
 				StartCoroutine (TriggerImmunity ());
 
 			}
-//				#region Push enemy that hit the player away
-//				var magnitude = 0.2f;
-//				var force = transform.position - coll.transform.position;
-//				force.Normalize ();
-//				coll.transform.GetComponent<Rigidbody2D> ().AddForce (-force * magnitude);
-//				#endregion
 			break;
-
-			}
+		case "LeftCrush":
+			wallCrushLeft = true;
+			break;
+		case "RightCrush":
+			wallCrushRight = true;
+			break;
+				
+		}
 
 
 	}
@@ -64,8 +76,21 @@ public class PlayerCollisionDetection : MonoBehaviour {
 		}
 	}
 
+	private void OnCollisionExit2D(Collision2D other)
+	{
+		switch (other.transform.tag)
+		{
+			case "LeftCrush":
+				wallCrushLeft = false;
+				break;
+			case "RightCrush":
+				wallCrushRight = false;
+				break;
+		}
+	}
 
-	private IEnumerator TriggerImmunity() {
+
+	public IEnumerator TriggerImmunity() {
 		float timeElapsed = 0f;
 		playerInvincible = true;
 		while (timeElapsed < 1.0f) {
@@ -86,6 +111,11 @@ public class PlayerCollisionDetection : MonoBehaviour {
 
 		transform.GetComponent<SpriteRenderer> ().color = new Color32 (255, 255, 255, 255);
 		playerInvincible = false;
+	}
+
+	public bool IsPlayerInvincible()
+	{
+		return playerInvincible;
 	}
 
 
