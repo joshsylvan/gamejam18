@@ -93,7 +93,7 @@ public class GunController : MonoBehaviour {
 		}
 			
 			if (Mathf.Abs(inputCircleRight.x) > 0.5f || Mathf.Abs(inputCircleRight.y) >0.5f) {	//if the player is holding the joystick to shoot
-				Debug.Log(inputCircleRight);
+//				Debug.Log(inputCircleRight);
 		
 				float angle = Mathf.Atan2 (inputCircleRight.y, inputCircleRight.x);			//then calculate the angle at which the right joystick is rotated towards
 				lastRotation = Quaternion.Euler (0, 0, angle * Mathf.Rad2Deg + 90);
@@ -172,17 +172,17 @@ public class GunController : MonoBehaviour {
 						GameObject newBullet = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;    //instantiate a new bullet
 						Rigidbody2D bulletRigidBody = newBullet.GetComponent<Rigidbody2D> ();                //get the rigidbody so force can be applied to it
 						bulletRigidBody.AddForce (-this.transform.up * shotgunSpeed*2);
-						Debug.Log (transform.up);
+//						Debug.Log (transform.up);
 
 						GameObject newBullet1 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;    //instantiate a new bullet
 						Rigidbody2D bulletRigidBody1 = newBullet1.GetComponent<Rigidbody2D> ();                //get the rigidbody so force can be applied to it
 						bulletRigidBody1.AddForce ((-this.transform.right - (this.transform.up) - this.transform.up/2) * shotgunSpeed);
-						Debug.Log (transform.right);
+//						Debug.Log (transform.right);
 
 						GameObject newBullet2 = Instantiate (shotgunBullet, transform.GetChild(1).position, Quaternion.identity) as GameObject;    //instantiate a new bullet
 						Rigidbody2D bulletRigidBody2 = newBullet2.GetComponent<Rigidbody2D> ();                //get the rigidbody so force can be applied to it
 						bulletRigidBody2.AddForce ((this.transform.right - this.transform.up - this.transform.up/2) * shotgunSpeed);
-						Debug.Log (-transform.right);
+//						Debug.Log (-transform.right);
 
 						shotgunAmmo--;
 						timeElapsedSinceLastShot = 0;    

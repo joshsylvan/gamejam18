@@ -13,6 +13,7 @@ public class RoomStats : MonoBehaviour
 	public GameObject trap1Object, trap2Object, monsterSpawn;
 	public Animator animtrap1, animtrap2;
 	private GameObject[] monsters;
+	private bool shouldSpawnMonster = false;
 	
 	// Use this for initialization
 	void Start ()
@@ -43,6 +44,14 @@ public class RoomStats : MonoBehaviour
 				}
 			}
 		}
+
+		if (shouldSpawnMonster)
+		{
+			GameObject monster = Instantiate(monsters[Random.RandomRange(0, monsters.Length)]);
+			monster.transform.position =
+				monsterSpawn.transform.GetChild(Random.RandomRange(0, monsterSpawn.transform.childCount)).transform.position;
+			shouldSpawnMonster = false;
+		}
 	}
 
 	public void Init()
@@ -54,9 +63,7 @@ public class RoomStats : MonoBehaviour
 
 	public void SpawnMonster()
 	{
-		GameObject monster = Instantiate(monsters[Random.RandomRange(0, monsters.Length)]);
-		monster.transform.position =
-			monsterSpawn.transform.GetChild(Random.RandomRange(0, monsterSpawn.transform.childCount)).transform.position;
+		shouldSpawnMonster = true;
 	}
 	
 	public void TriggerTrap1()

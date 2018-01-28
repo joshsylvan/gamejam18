@@ -17,7 +17,7 @@ public class AmmoUI : MonoBehaviour {
 	void Update () {
 
 
-		Debug.Log (gunController.equippedGunType == GunController.gunType.pistol);
+//		Debug.Log (gunController.equippedGunType == GunController.gunType.pistol);
 
 		#region Updating pistol UI
 		if (gunController.PistolObtained /*&& gunController.equippedGunType == GunController.gunType.pistol*/) {																//if you have the pistol

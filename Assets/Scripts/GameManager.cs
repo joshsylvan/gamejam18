@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 	private RoomManager roomManager;
 	private ServerResponce sr;
 
-	public RoomStats dungeon, bathroom, corridor1; 
+	public RoomStats dungeon, bathroom, corridor1, playroom; 
 
 	private string jsonToSend = "";
 	// Use this for initialization
@@ -39,21 +39,31 @@ public class GameManager : MonoBehaviour
 				case "corridor":
 					UpdateRoom(corridor1);
 					break;
+				case "playroom":
+					UpdateRoom(playroom);
+					break;
 			}
 		}
 	}
 	
 	public void UpdateRoom(RoomStats room)
 	{
-		
+		Debug.Log(sr.trap1);
 		if (sr.trap1.Equals("true"))
 		{
 			room.TriggerTrap1();
 		}
 
+		Debug.Log(sr.trap2);
 		if (sr.trap2.Equals("true"))
 		{
 			room.TriggerTrap2();
+		}
+
+		Debug.Log(sr.monster);
+		if (sr.monster.Equals("true"))
+		{
+			room.SpawnMonster();
 		}
 		
 	}	
